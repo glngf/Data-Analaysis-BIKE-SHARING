@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 matplotlib==3.8.0
 numpy==1.25.2
 pandas==2.1.4
