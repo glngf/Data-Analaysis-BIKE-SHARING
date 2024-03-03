@@ -23,39 +23,25 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import streamlit as st
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
-"""## Data Wrangling
+# Judul Dashboard
+st.title("Bike Sharing Dashboard")
+st.sidebar.markdown("Gilang Ferdiansyah")
+st.sidebar.markdown("Ig : glngf_")
+st.sidebar.markdown("Email: gilangf150203@gmail.com")
 
-### Gathering Data
-"""
 
 day = pd.read_csv('https://raw.githubusercontent.com/glngf/Data-Analaysis-BIKE-SHARING/ea39d4b47bfb7f03a3c5427615e5bc5b8c5f4601/day.csv')
-day.head()
-
-day.info()
 
 hour = pd.read_csv('https://raw.githubusercontent.com/glngf/Data-Analaysis-BIKE-SHARING/ea39d4b47bfb7f03a3c5427615e5bc5b8c5f4601/hour.csv')
-hour.head()
-
-hour.info()
 
 print("Jumlah baris di DataFrame day:", day.shape[0])
 print("Jumlah baris di DataFrame hour:", hour.shape[0])
 
-"""### Menggabungkan data day dan hour
-
-"""
-
 bike_share = day.merge(hour, on='dteday', how='inner', suffixes=('_daily', '_hourly'))
-print(bike_share.shape)
-# df_product.head()
-bike_share.loc[bike_share["dteday"].isnull()]
-bike_share.head()
 
-bike_share.info()
-
-"""### Cleaning Data"""
 
 day.rename(columns={'yr': 'year', 'mnth': 'month', 'dteday': 'Date'}, inplace=True)
 
@@ -69,71 +55,22 @@ hour['Date'] = pd.to_datetime(hour['Date'])
 
 hour.info()
 
+#1
 plt.figure(figsize=(10, 8))
 sns.barplot(x="mnth_daily", y="cnt_daily", data=bike_share)
 plt.title("Pola sewa sepeda harian berdasarkan bulan")
 plt.xlabel("Bulan")
 plt.ylabel("Jumlah Sewa Sepeda Harian")
+plt.show()
 st.pyplot()
 
-# Visualisasi dengan Streamlit
-st.subheader('Daily Orders')
-
-col1, col2 = st.columns(2)
-
-with col1:
-    total_orders = daily_orders_df.order_count.sum()
-    st.metric("Total orders", value=total_orders)
-
-with col2:
-    total_revenue = format_currency(daily_orders_df.revenue.sum(), "AUD", locale='es_CO') 
-    st.metric("Total Revenue", value=total_revenue)
-
-fig, ax = plt.subplots(figsize=(16, 8))
-ax.plot(
-    daily_orders_df["order_date"],
-    daily_orders_df["order_count"],
-    marker='o',
-    linewidth=2,
-    color="#90CAF9"
-)
-ax.tick_params(axis='y', labelsize=20)
-ax.tick_params(axis='x', labelsize=15)
-ax.xaxis.set_major_formatter(DateFormatter("%Y-%m-%d"))  # Format tanggal jika diperlukan
-
-st.pyplot(fig)
-
+#2
 # Visualisasi dengan seaborn
 plt.figure(figsize=(10, 8))
 sns.barplot(x="workingday_daily", y="cnt_daily", data=bike_share)
-
 # Menambahkan keterangan "weekend" dan "weekdays"
 plt.title("Pola Sewa Sepeda Harian antara Hari Kerja dan Hari Libur")
-plt.xlabel("Hari Kerja (1: Weekdays, 0: Weekend)")
+plt.xlabel("Hari Kerja ( Weekdays,  Weekend)")
 plt.ylabel("Jumlah Sewa Sepeda Harian")
 plt.xticks([0, 1], ["Weekend", "Weekdays"])  # Menambahkan label pada sumbu x
 st.pyplot()
-
-# Visualisasi dengan Streamlit
-col1, col2 = st.columns(2)
-
-with col1:
-    total_orders = daily_orders_df.order_count.sum()
-    st.metric("Total orders", value=total_orders)
-
-with col2:
-    total_revenue = format_currency(daily_orders_df.revenue.sum(), "AUD", locale='es_CO') 
-    st.metric("Total Revenue", value=total_revenue)
-
-fig, ax = plt.subplots(figsize=(16, 8))
-ax.plot(
-    daily_orders_df["order_date"],
-    daily_orders_df["order_count"],
-    marker='o',
-    linewidth=2,
-    color="#90CAF9"
-)
-ax.tick_params(axis='y', labelsize=20)
-ax.tick_params(axis='x', labelsize=15)
-
-st.pyplot(fig)
