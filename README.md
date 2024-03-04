@@ -1,5 +1,4 @@
-# Data-Analaysis-BIKE-SHARING
-# Dashboard
+#Dicoding Collection Dashboard ✨
 # Setup environment
 conda create --name main-ds python=3.9
 conda activate main-ds
